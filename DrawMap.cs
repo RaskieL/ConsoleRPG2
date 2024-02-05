@@ -52,30 +52,20 @@ namespace ConsoleRPG2{
                             chunk += "h";
                         }
 
-                        if(y == 0){
-                            if(chunk.Contains('h')){
-                                chunk = chunk.Replace("h", "");
-                            }
+                        if(y == 0 && chunk.Contains('h')){
+                            chunk = chunk.Replace("h", "");
                         }
-                        if(y == MAPCHUNKSIZE-1){
-                            if(chunk.Contains('b')){
-                                chunk =chunk.Replace("b", "");
-                            }
+                        if(y == MAPCHUNKSIZE-1 && chunk.Contains('b')){
+                            chunk =chunk.Replace("b", "");
                         }
-                        if(x == 0){
-                            if(chunk.Contains('l')){
-                                chunk =chunk.Replace("l", "");
-                            }
+                        if(x == 0 && chunk.Contains('l')){
+                            chunk =chunk.Replace("l", "");
                         }
-                        if(x == MAPCHUNKSIZE-1){
-                            if(chunk.Contains('r')){
-                                chunk =chunk.Replace("r", "");
-                            }
+                        if(x == MAPCHUNKSIZE-1 && chunk.Contains('r')){
+                            chunk =chunk.Replace("r", "");
                         }
                         chunk = string.Concat(chunk.OrderBy(c => c));
-                        if(chunk.Equals("")){
-                            chunk = "void";
-                        }
+
                         mapChunks.Add(chunkCoordinates,chunk);
                     }
                 }
@@ -84,13 +74,16 @@ namespace ConsoleRPG2{
             for(int x = 0; x < MAPCHUNKSIZE; x++){
                 for(int y = 0; y < MAPCHUNKSIZE; y++){
                     if(x < MAPCHUNKSIZE-1 && mapChunks[allChunkCoordinates[x+1][y]].Contains('l') && !mapChunks[allChunkCoordinates[x][y]].Contains('r')){
-                            Console.WriteLine($"Raccordement de {x},{y} et {x-1},{y} avec un r");
+                            Console.WriteLine($"Raccordement de {x},{y} et {x+1},{y} avec un r");
                             mapChunks[allChunkCoordinates[x][y]] = string.Concat((mapChunks[allChunkCoordinates[x][y]]+"r").OrderBy(c => c));
                         }
                     if(y < MAPCHUNKSIZE-1 && mapChunks[allChunkCoordinates[x][y+1]].Contains('h') && !mapChunks[allChunkCoordinates[x][y]].Contains('b')){
-                        Console.WriteLine($"Raccordement de {x},{y} et {x},{y-1} avec un b");
+                        Console.WriteLine($"Raccordement de {x},{y} et {x},{y+1} avec un b");
                         mapChunks[allChunkCoordinates[x][y]] = string.Concat((mapChunks[allChunkCoordinates[x][y]]+"b").OrderBy(c => c));
                     }
+                    if(mapChunks[allChunkCoordinates[x][y]].Equals("")){
+                            mapChunks[allChunkCoordinates[x][y]] = "o";
+                        }
                 }
             }
 
