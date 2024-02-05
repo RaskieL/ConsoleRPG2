@@ -1,30 +1,36 @@
 {
   "format": 1,
   "restore": {
-    "/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/ConsoleRPG2.csproj": {}
+    "B:\\Code\\ConsoleRPG2\\ConsoleRPG2.csproj": {}
   },
   "projects": {
-    "/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/ConsoleRPG2.csproj": {
+    "B:\\Code\\ConsoleRPG2\\ConsoleRPG2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/ConsoleRPG2.csproj",
+        "projectUniqueName": "B:\\Code\\ConsoleRPG2\\ConsoleRPG2.csproj",
         "projectName": "ConsoleRPG2",
-        "projectPath": "/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/ConsoleRPG2.csproj",
-        "packagesPath": "/home/raskiel/.nuget/packages/",
-        "outputPath": "/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/",
+        "projectPath": "B:\\Code\\ConsoleRPG2\\ConsoleRPG2.csproj",
+        "packagesPath": "C:\\Users\\RaSyst\\.nuget\\packages\\",
+        "outputPath": "B:\\Code\\ConsoleRPG2\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "B:\\Development\\Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/raskiel/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\RaSyst\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net7.0"
+          "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net7.0": {
-            "targetAlias": "net7.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -35,8 +41,8 @@
         }
       },
       "frameworks": {
-        "net7.0": {
-          "targetAlias": "net7.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "imports": [
             "net461",
             "net462",
@@ -53,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/raskiel/dotnet/sdk/7.0.202/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

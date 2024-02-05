@@ -1,0 +1,15 @@
+B:\Code\ConsoleRPG2\bin\Debug\net8.0\ConsoleRPG2.exe
+B:\Code\ConsoleRPG2\bin\Debug\net8.0\ConsoleRPG2.deps.json
+B:\Code\ConsoleRPG2\bin\Debug\net8.0\ConsoleRPG2.runtimeconfig.json
+B:\Code\ConsoleRPG2\bin\Debug\net8.0\ConsoleRPG2.dll
+B:\Code\ConsoleRPG2\bin\Debug\net8.0\ConsoleRPG2.pdb
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\ConsoleRPG2.GeneratedMSBuildEditorConfig.editorconfig
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\ConsoleRPG2.AssemblyInfoInputs.cache
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\ConsoleRPG2.AssemblyInfo.cs
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\ConsoleRPG2.csproj.CoreCompileInputs.cache
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\ConsoleRPG2.sourcelink.json
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\ConsoleRPG2.dll
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\refint\ConsoleRPG2.dll
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\ConsoleRPG2.pdb
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\ConsoleRPG2.genruntimeconfig.cache
+B:\Code\ConsoleRPG2\obj\Debug\net8.0\ref\ConsoleRPG2.dll

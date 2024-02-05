@@ -42,6 +42,7 @@ namespace ConsoleRPG2
 
         public static void Main(string[] args){
             Program program = new Program();
+            DrawMap.generateMap();
             program.Run();
         }
         public static void displayError(string errormessage){

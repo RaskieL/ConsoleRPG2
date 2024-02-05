@@ -133,8 +133,6 @@ namespace ConsoleRPG2
             this.HP = HPmax;
             this.HPtemp = 0;
             this.InitiativeMod = this.DexterityMod;
-
-            this.displayCharacterSheet();
         }
 
         // Met à jour les modificateurs de caractéristiques.
