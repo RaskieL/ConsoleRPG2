@@ -217,6 +217,7 @@ namespace ConsoleRPG2
         // Met à jour les pv maximum au niveau 1
         public void updateInitialHPMax(){
             this.HPmax = 8 + this.ConstitutionMod;
+            this.HP = this.HPmax;
         }
 
         // Met à jour la classe d'armure

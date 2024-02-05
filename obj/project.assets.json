@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/raskiel/Bureau/Code/ConsoleRPG2/ConsoleRPG2.csproj",
+      "projectUniqueName": "/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/ConsoleRPG2.csproj",
       "projectName": "ConsoleRPG2",
-      "projectPath": "/home/raskiel/Bureau/Code/ConsoleRPG2/ConsoleRPG2.csproj",
+      "projectPath": "/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/ConsoleRPG2.csproj",
       "packagesPath": "/home/raskiel/.nuget/packages/",
-      "outputPath": "/home/raskiel/Bureau/Code/ConsoleRPG2/obj/",
+      "outputPath": "/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/raskiel/.nuget/NuGet/NuGet.Config"
