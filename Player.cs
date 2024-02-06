@@ -402,25 +402,25 @@ namespace ConsoleRPG2
             char botChar = '/';
 
             try{
-                upChar = DrawMap.GetMap()[this.playerXPos-1][this.playerYPos];
+                upChar = DrawMap.GetMap()[this.playerXPos][this.playerYPos-1];
             }catch(Exception){
 
             }
 
             try{
-                rightChar = DrawMap.GetMap()[this.playerXPos][this.playerYPos+1];
+                rightChar = DrawMap.GetMap()[this.playerXPos+1][this.playerYPos];
             }catch(Exception){
 
             }
 
             try{
-                leftChar = DrawMap.GetMap()[this.playerXPos][this.playerYPos-1];
+                leftChar = DrawMap.GetMap()[this.playerXPos-1][this.playerYPos];
             }catch(Exception){
 
             }
 
             try{
-                botChar = DrawMap.GetMap()[this.playerXPos+1][this.playerYPos+1];
+                botChar = DrawMap.GetMap()[this.playerXPos][this.playerYPos+1];
             }catch(Exception){
 
             }

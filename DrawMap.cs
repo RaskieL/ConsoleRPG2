@@ -15,7 +15,7 @@ namespace ConsoleRPG2{
         private static Dictionary<int[],string> mapChunks = new Dictionary<int[],string>();
         private static char[][] map = new char[XSIZE][];
 
-        private const char playerToken = 'o';
+        private const char playerToken = 'O';
         private static int[] previousPlayerPosition = {0,0};
 
         private static Random rnd = new Random();
@@ -72,6 +72,26 @@ namespace ConsoleRPG2{
                 }
             }
 
+            for(int x = 1; x < MAPCHUNKSIZE; x++){
+                for(int y = 0; y < MAPCHUNKSIZE; y++){
+                    if(rnd.NextDouble() > 0.8){
+                        mapChunks[allChunkCoordinates[x][y]] = "void";
+                        if(x < MAPCHUNKSIZE-1 && mapChunks[allChunkCoordinates[x+1][y]].Contains('l') && !mapChunks[allChunkCoordinates[x+1][y]].Equals("void")){
+                            mapChunks[allChunkCoordinates[x+1][y]] = string.Concat(mapChunks[allChunkCoordinates[x+1][y]].Replace("l","").OrderBy(c => c));
+                        }
+                        if(x > 0 && mapChunks[allChunkCoordinates[x-1][y]].Contains('r') && !mapChunks[allChunkCoordinates[x-1][y]].Equals("void")){
+                            mapChunks[allChunkCoordinates[x-1][y]] = string.Concat(mapChunks[allChunkCoordinates[x-1][y]].Replace("r","").OrderBy(c => c));
+                        }
+                        if(y < MAPCHUNKSIZE-1 && mapChunks[allChunkCoordinates[x][y+1]].Contains('h') && !mapChunks[allChunkCoordinates[x][y+1]].Equals("void")){
+                            mapChunks[allChunkCoordinates[x][y+1]] = string.Concat(mapChunks[allChunkCoordinates[x][y+1]].Replace("h","").OrderBy(c => c));
+                        }
+                        if(y > 0 && mapChunks[allChunkCoordinates[x][y-1]].Contains('b') && !mapChunks[allChunkCoordinates[x][y-1]].Equals("void")){
+                            mapChunks[allChunkCoordinates[x][y-1]] = string.Concat(mapChunks[allChunkCoordinates[x][y-1]].Replace("b","").OrderBy(c => c));
+                        }
+                    }
+                }
+            }
+
             for(int x = 0; x < MAPCHUNKSIZE; x++){
                 for(int y = 0; y < MAPCHUNKSIZE; y++){
                     if(x < MAPCHUNKSIZE-1 && mapChunks[allChunkCoordinates[x+1][y]].Contains('l') && !mapChunks[allChunkCoordinates[x][y]].Contains('r')){
@@ -85,7 +105,6 @@ namespace ConsoleRPG2{
                         }
                 }
             }
-
             using StreamWriter outputFile = new StreamWriter("map.txt");
             for (int y = 0; y < MAPCHUNKSIZE; y++)
             {
@@ -107,7 +126,9 @@ namespace ConsoleRPG2{
             StreamReader reader = new("map.txt");
             for(int y = 0; y < YSIZE; y++){
                 for(int x = 0; x < XSIZE; x++){
-                    map[x] = new char[XSIZE];
+                    if(map[x] == null){
+                        map[x] = new char[XSIZE];
+                    }
                     map[x][y] = (char)reader.Read();
                 }
             }
@@ -127,7 +148,6 @@ namespace ConsoleRPG2{
                 for(int x = 0; x < XSIZE; x++){
                     Console.Write(map[x][y]);
                 }
-                Console.WriteLine();
             }
         }
 
