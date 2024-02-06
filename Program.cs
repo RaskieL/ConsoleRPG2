@@ -15,9 +15,14 @@ namespace ConsoleRPG2
                 switch (currentState){
 
                     case "generate_map":
-                    DrawMap.generateMap();
-                    DrawMap.ReadMap();
-                    DrawMap.DisplayMap();
+                    do{
+                        Console.WriteLine("Génération...");
+                        DrawMap.generateMap();
+                        Console.WriteLine("Lecture de la carte...");
+                        DrawMap.ReadMap();
+                        Console.Clear();
+                        DrawMap.DisplayMap();
+                    }while(!DrawMap.isMapOk());
                     //player.setRandomPlayerPos();
                     StateMachine.removeLastState();
                     break;
