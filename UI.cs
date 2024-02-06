@@ -19,23 +19,14 @@ namespace ConsoleRPG2
             try
             {
                 string userinput = Console.ReadLine()!;
-                switch (userinput)
+                return userinput switch
                 {
-                    case "1":
-                        return "character_creation";
-
-                    case "2":
-                        return "load_game";
-
-                    case "3":
-                        return "settings";
-
-                    case "4":
-                        return "game_exit";
-
-                    default:
-                        return "main_menu";
-                }
+                    "1" => "character_creation",
+                    "2" => "load_game",
+                    "3" => "settings",
+                    "4" => "game_exit",
+                    _ => "main_menu",
+                };
             }
             catch (Exception)
             {

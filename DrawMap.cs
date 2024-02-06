@@ -222,19 +222,14 @@ namespace ConsoleRPG2
         public static bool isMapOk()
         {
             Console.WriteLine("Cette map vous convient-elle ? (O/N)");
-            switch (Console.ReadLine()!.ToLower())
+            return Console.ReadLine()!.ToLower() switch
             {
-                case "o":
-                    return true;
-                case "oui":
-                    return true;
-                case "n":
-                    return false;
-                case "non":
-                    return false;
-                default:
-                    return false;
-            }
+                "o" => true,
+                "oui" => true,
+                "n" => false,
+                "non" => false,
+                _ => false,
+            };
         }
     }
 }
