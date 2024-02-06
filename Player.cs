@@ -3,6 +3,9 @@ namespace ConsoleRPG2
     public class Player
     {
 
+        private static Random rnd = new Random();
+        private int playerXPos;
+        private int playerYPos;
         // Nom du joueur et niveau
         private string playerName;
         private int playerLevel;
@@ -90,6 +93,8 @@ namespace ConsoleRPG2
         // Constructeur
         public Player(string name)
         {
+            this.playerXPos = 3;
+            this.playerYPos = 3;
             this.playerName = name;
             this.playerLevel = 1;
             this.XP = 0;
@@ -355,6 +360,94 @@ namespace ConsoleRPG2
             Console.WriteLine($"JDS Intelligence: {plusminus}{this.IntelligenceST} (Maitrisé: {this.isIntelligenceSTmastered})");
             plusminus = this.CharismaST < 0 ? "" : "+";
             Console.WriteLine($"JDS Charisme: {plusminus}{this.CharismaST} (Maitrisé: {this.isWisdomSTmastered})\n");
+        }
+
+        public int getPlayerXPos(){
+            return this.playerXPos;
+        }
+
+        public int getPlayerYPos(){
+            return this.playerYPos;
+        }
+
+        public void setPlayerXPos(int x){
+            this.playerXPos = x;
+        }
+
+        public void setPlayerYPos(int y){
+            this.playerYPos = y;
+        }
+
+        public void setPlayerPos(int x, int y){
+            setPlayerXPos(x);
+            setPlayerYPos(y);
+        }
+
+        public void setRandomPlayerPos(){
+            int rndX = rnd.Next(1,DrawMap.getXsize());
+            int rndY = rnd.Next(1,DrawMap.getYsize());
+            while(DrawMap.getWallChars().Contains(DrawMap.GetMap()[rndX][rndY])){
+                rndX = rnd.Next(1,DrawMap.getXsize());
+                rndY = rnd.Next(1,DrawMap.getYsize());
+            }
+            this.setPlayerPos(rndX,rndY);
+        }
+
+        public void movePlayer(){
+            DrawMap.setPreviousPlayerPos(this.playerXPos, this.playerYPos);
+
+            char upChar = '/';
+            char rightChar = '/';
+            char leftChar = '/';
+            char botChar = '/';
+
+            try{
+                upChar = DrawMap.GetMap()[this.playerXPos-1][this.playerYPos];
+            }catch(Exception){
+
+            }
+
+            try{
+                rightChar = DrawMap.GetMap()[this.playerXPos][this.playerYPos+1];
+            }catch(Exception){
+
+            }
+
+            try{
+                leftChar = DrawMap.GetMap()[this.playerXPos][this.playerYPos-1];
+            }catch(Exception){
+
+            }
+
+            try{
+                botChar = DrawMap.GetMap()[this.playerXPos+1][this.playerYPos+1];
+            }catch(Exception){
+
+            }
+            Console.WriteLine($"Upchar: {upChar} Botchar: {botChar} LeftChar: {leftChar} RightChar: {rightChar}");
+            
+            switch(Console.ReadKey().Key){
+                case ConsoleKey.UpArrow:
+                if(!DrawMap.getWallChars().Contains(upChar) && this.playerYPos-1 > 0 && this.playerYPos-1 < DrawMap.getYsize()){
+                        this.playerYPos -= 1;
+                }
+                break;
+                case ConsoleKey.DownArrow:
+                if(!DrawMap.getWallChars().Contains(botChar) && this.playerYPos+1 > 0 && this.playerYPos+1 < DrawMap.getYsize()){
+                    this.playerYPos +=1;
+                }
+                break;
+                case ConsoleKey.LeftArrow:
+                if(!DrawMap.getWallChars().Contains(leftChar) && this.playerXPos-1 > 0 && this.playerXPos-1 < DrawMap.getXsize()){
+                    this.playerXPos -=1;
+                }
+                break;
+                case ConsoleKey.RightArrow:
+                if(!DrawMap.getWallChars().Contains(rightChar) && this.playerXPos+1 > 0 && this.playerXPos+1 < DrawMap.getXsize()){
+                    this.playerXPos +=1;
+                }
+                break;
+            }
         }
     }
 }

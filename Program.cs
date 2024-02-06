@@ -1,19 +1,32 @@
 ﻿using System.Runtime.InteropServices;
+using System.Security.Claims;
 
 namespace ConsoleRPG2
 {
     public class Program{
         Player player = new Player("Unknown");
+        
         public void Run(){
-            StateMachine.addState("main_menu");
             
+            StateMachine.addState("main_menu");
             while (true){
                 string currentState = StateMachine.getCurrentState();
 
                 switch (currentState){
 
+                    case "generate_map":
+                    DrawMap.generateMap();
+                    DrawMap.ReadMap();
+                    DrawMap.DisplayMap();
+                    //player.setRandomPlayerPos();
+                    StateMachine.removeLastState();
+                    break;
+
                     case "main_menu":
                         StateMachine.updateCurrentState(Main_menu.mainMenu());
+                        if(StateMachine.getCurrentState().Equals("character_creation")){
+                            StateMachine.addState("generate_map");
+                        }
                         break;
 
                     case "character_creation":
@@ -21,12 +34,20 @@ namespace ConsoleRPG2
                             player = Character_creator.characterCreator()!;
                             Character_creator.playerStatAssignationScreen(player);
                             player.updateAll();
-                            StateMachine.updateCurrentState("game_menu");
+                            StateMachine.updateCurrentState("player_action");
                         }
                         catch (Exception){
                             displayError($"Une erreur est survenue lors de la création du personnage. Assurez-vous d'entrer un nom correct");
                         }
                         break;
+
+                    case "player_action":
+                    player.movePlayer();
+                    DrawMap.UpdateMapPlayerPos(player);
+                    DrawMap.DisplayMap();
+                    Console.WriteLine($"XPOS: {player.getPlayerXPos()} YPOS: {player.getPlayerYPos(
+                    )}");
+                    break;
 
                     case "game_menu":
                         player.displayCharacterSheet();
@@ -42,10 +63,6 @@ namespace ConsoleRPG2
 
         public static void Main(string[] args){
             Program program = new Program();
-            DrawMap.generateMap();
-            DrawMap.ReadMap();
-            DrawMap.DisplayMap();
-            Console.ReadLine();
             program.Run();
         }
         public static void displayError(string errormessage){

@@ -15,14 +15,17 @@ namespace ConsoleRPG2{
         private static Dictionary<int[],string> mapChunks = new Dictionary<int[],string>();
         private static char[][] map = new char[XSIZE][];
 
-        private const string playerToken = "o";
+        private const char playerToken = 'o';
+        private static int[] previousPlayerPosition = {0,0};
 
         private static Random rnd = new Random();
 
-        private const int MAPCHUNKSIZE = 8;
+        private const int MAPCHUNKSIZE = 4;
 
         private const int XSIZE = MAPCHUNKSIZE * 26+1;
         private const int YSIZE = MAPCHUNKSIZE * 9;
+
+        private static char[] wallChars = {'|', '_', '‾', '/', '\\'};
 
 
         public static void generateMap(){
@@ -44,11 +47,9 @@ namespace ConsoleRPG2{
                         int rndvalue2 = rnd.Next(0,8);
                         string chunk = modularChunks[rndvalue1][rndvalue2];
                         if(x > 0 && mapChunks[allChunkCoordinates[x-1][y]].Contains('r') && !chunk.Contains('l')){
-                            Console.WriteLine($"Raccordement de {x},{y} et {x-1},{y} avec un l");
                             chunk += "l";
                         }
                         if(y > 0 && mapChunks[allChunkCoordinates[x][y-1]].Contains('b') && !chunk.Contains('h')){
-                            Console.WriteLine($"Raccordement de {x},{y} et {x},{y-1} avec un h");
                             chunk += "h";
                         }
 
@@ -74,11 +75,9 @@ namespace ConsoleRPG2{
             for(int x = 0; x < MAPCHUNKSIZE; x++){
                 for(int y = 0; y < MAPCHUNKSIZE; y++){
                     if(x < MAPCHUNKSIZE-1 && mapChunks[allChunkCoordinates[x+1][y]].Contains('l') && !mapChunks[allChunkCoordinates[x][y]].Contains('r')){
-                            Console.WriteLine($"Raccordement de {x},{y} et {x+1},{y} avec un r");
                             mapChunks[allChunkCoordinates[x][y]] = string.Concat((mapChunks[allChunkCoordinates[x][y]]+"r").OrderBy(c => c));
                         }
                     if(y < MAPCHUNKSIZE-1 && mapChunks[allChunkCoordinates[x][y+1]].Contains('h') && !mapChunks[allChunkCoordinates[x][y]].Contains('b')){
-                        Console.WriteLine($"Raccordement de {x},{y} et {x},{y+1} avec un b");
                         mapChunks[allChunkCoordinates[x][y]] = string.Concat((mapChunks[allChunkCoordinates[x][y]]+"b").OrderBy(c => c));
                     }
                     if(mapChunks[allChunkCoordinates[x][y]].Equals("")){
@@ -95,7 +94,7 @@ namespace ConsoleRPG2{
                     for (int x = 0; x < MAPCHUNKSIZE; x++)
                     {
                         int[] clef = allChunkCoordinates[x][y];
-                        string line = File.ReadLines("mapTemplates\\" + mapChunks[clef] + ".txt").Skip(i).Take(1).First();
+                        string line = File.ReadLines("mapTemplates/" + mapChunks[clef] + ".txt").Skip(i).Take(1).First();
                         outputFile.Write(line);
                     }
                     outputFile.Write("\n");
@@ -106,20 +105,55 @@ namespace ConsoleRPG2{
 
         public static void ReadMap(){
             StreamReader reader = new("map.txt");
-            for(int x = 0; x < XSIZE; x++){
-                map[x] = new char[XSIZE];
-                for(int y = 0; y < YSIZE; y++){
+            for(int y = 0; y < YSIZE; y++){
+                for(int x = 0; x < XSIZE; x++){
+                    map[x] = new char[XSIZE];
                     map[x][y] = (char)reader.Read();
                 }
             }
         }
 
+        public static char[][] GetMap(){
+            return map;
+        }
+
+        public static void EditMap(int x, int y, char val){
+            map[x][y] = val;
+        }
+
         public static void DisplayMap(){
-            for(int x = 0; x < XSIZE; x++){
-                for(int y = 0; y < YSIZE; y++){
+            Console.Clear();
+            for(int y = 0; y < YSIZE; y++){
+                for(int x = 0; x < XSIZE; x++){
                     Console.Write(map[x][y]);
                 }
+                Console.WriteLine();
             }
+        }
+
+        public static void UpdateMapPlayerPos(Player player){
+            if(!wallChars.Contains(map[previousPlayerPosition[0]][previousPlayerPosition[1]])){
+                map[previousPlayerPosition[0]][previousPlayerPosition[1]] = ' ';
+            }
+
+            map[player.getPlayerXPos()][player.getPlayerYPos()] = playerToken;
+        }
+
+        public static int getXsize(){
+            return XSIZE;
+        }
+
+        public static int getYsize(){
+            return YSIZE;
+        }
+
+        public static char[] getWallChars(){
+            return wallChars;
+        }
+
+        public static void setPreviousPlayerPos(int x, int y){
+            previousPlayerPosition[0] = x;
+            previousPlayerPosition[1] = y;
         }
     }
 }
