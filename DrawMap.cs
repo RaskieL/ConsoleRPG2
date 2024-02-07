@@ -8,26 +8,26 @@ namespace ConsoleRPG2
     public static class DrawMap
     {
 
-        private static string[] rightConnectors = ["r", "lr", "blr", "hlr", "bhlr", "hr", "bhr", "br"];
-        private static string[] topConnectors = ["h", "hl", "hlr", "bhl", "bhlr", "hr", "bhr", "bh"];
-        private static string[] bottomConnectors = ["b", "bl", "blr", "bhl", "bhlr", "bhr", "br", "bh"];
-        private static string[] leftConnectors = ["l", "bl", "lr", "blr", "hlr", "hl", "bhl", "bhlr"];
+        private static string[] rightConnectors = new string[]{"r", "lr", "blr", "hlr", "bhlr", "hr", "bhr", "br"};
+        private static string[] topConnectors = new string[]{"h", "hl", "hlr", "bhl", "bhlr", "hr", "bhr", "bh"};
+        private static string[] bottomConnectors = new string[]{"b", "bl", "blr", "bhl", "bhlr", "bhr", "br", "bh"};
+        private static string[] leftConnectors = new string[]{"l", "bl", "lr", "blr", "hlr", "hl", "bhl", "bhlr"};
 
-        private static string[][] modularChunks = [rightConnectors, topConnectors, bottomConnectors, leftConnectors];
-        private static Dictionary<int[], string> mapChunks = [];
+        private static string[][] modularChunks = new string[][]{rightConnectors, topConnectors, bottomConnectors, leftConnectors};
+        private static Dictionary<int[], string> mapChunks = new Dictionary<int[], string>();
         private static char[][] map = new char[XSIZE][];
 
         private const char playerToken = 'O';
-        private static int[] previousPlayerPosition = [0, 0];
+        private static int[] previousPlayerPosition = new int[]{0, 0};
 
         private static Random rnd = new Random();
 
-        private const int MAPCHUNKSIZE = 3;
+        private const int MAPCHUNKSIZE = 5;
 
         private const int XSIZE = MAPCHUNKSIZE * 26 + 1;
         private const int YSIZE = MAPCHUNKSIZE * 9;
 
-        private static char[] wallChars = ['|', '_', '‾', '/', '\\'];
+        private static char[] wallChars = new char[]{'|', '_', '‾', '/', '\\'};
 
 
         public static void generateMap()
@@ -41,7 +41,7 @@ namespace ConsoleRPG2
                 for (int y = 0; y < MAPCHUNKSIZE; y++)
                 {
 
-                    int[] chunkCoordinates = [x, y];
+                    int[] chunkCoordinates = new int[]{x, y};
                     allChunkCoordinates[x][y] = chunkCoordinates;
 
                     if (mapChunks.Count == 0)

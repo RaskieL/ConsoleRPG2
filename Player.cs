@@ -306,7 +306,7 @@ namespace ConsoleRPG2
 
         // Accès en lecture de toutes les statistiques sous forme de tableau
         public int[] getStats(){
-            int[] stats = [this.getStrength(),this.getDexterity(),this.getConstitution(),this.getWisdom(),this.getIntelligence(),this.getCharisma()];
+            int[] stats = new int[]{this.getStrength(),this.getDexterity(),this.getConstitution(),this.getWisdom(),this.getIntelligence(),this.getCharisma()};
             return stats;
         }
 
