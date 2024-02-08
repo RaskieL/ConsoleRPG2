@@ -75,7 +75,8 @@ namespace ConsoleRPG2
                 Console.WriteLine($"[4] - Sagesse ({player.getWisdom()})");
                 Console.WriteLine($"[5] - Intelligence ({player.getIntelligence()})");
                 Console.WriteLine($"[6] - Charisme ({player.getCharisma()})");
-                Console.WriteLine($"[7] - Reroll");
+                Console.WriteLine($"[7] - Tout assigner aléatoirement");
+                Console.WriteLine($"[8] - Reroll");
                 Console.WriteLine("\nVotre choix:");
                 switch(Console.ReadLine()){
                     case "1":
@@ -139,6 +140,12 @@ namespace ConsoleRPG2
                     }
                     break;
                     case "7":
+                    player.setStats(rolls[0],rolls[1],rolls[2],rolls[3],rolls[4],rolls[5]);
+                    for(int i = 0; i<6;i++){
+                        rolls.RemoveAt(0);
+                    }
+                    break;
+                    case "8":
                     rolls = new List<int>{DiceRoller.statDiceRoll(),DiceRoller.statDiceRoll(),DiceRoller.statDiceRoll(),DiceRoller.statDiceRoll(),DiceRoller.statDiceRoll(),DiceRoller.statDiceRoll()};
                     player.setStats(0,0,0,0,0,0);
                     break;
