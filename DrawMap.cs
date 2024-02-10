@@ -8,31 +8,37 @@ namespace ConsoleRPG2
     public static class DrawMap
     {
 
-        private static string[] rightConnectors = new string[]{"r", "lr", "blr", "hlr", "bhlr", "hr", "bhr", "br"};
-        private static string[] topConnectors = new string[]{"h", "hl", "hlr", "bhl", "bhlr", "hr", "bhr", "bh"};
-        private static string[] bottomConnectors = new string[]{"b", "bl", "blr", "bhl", "bhlr", "bhr", "br", "bh"};
-        private static string[] leftConnectors = new string[]{"l", "bl", "lr", "blr", "hlr", "hl", "bhl", "bhlr"};
+        private static string[] rightConnectors = new string[] { "r", "lr", "blr", "hlr", "bhlr", "hr", "bhr", "br" };
+        private static string[] topConnectors = new string[] { "h", "hl", "hlr", "bhl", "bhlr", "hr", "bhr", "bh" };
+        private static string[] bottomConnectors = new string[] { "b", "bl", "blr", "bhl", "bhlr", "bhr", "br", "bh" };
+        private static string[] leftConnectors = new string[] { "l", "bl", "lr", "blr", "hlr", "hl", "bhl", "bhlr" };
 
-        private static string[][] modularChunks = new string[][]{rightConnectors, topConnectors, bottomConnectors, leftConnectors};
+        private static string[][] modularChunks = new string[][] { rightConnectors, topConnectors, bottomConnectors, leftConnectors };
         private static Dictionary<int[], string> mapChunks = new Dictionary<int[], string>();
+        private static int[][][] allChunkCoordinates = new int[MAPCHUNKSIZE][][];
         private static char[][] map = new char[XSIZE][];
 
         private const char playerToken = 'O';
-        private static int[] previousPlayerPosition = new int[]{0, 0};
+        private static int[] previousPlayerPosition = new int[] { 0, 0 };
 
         private static Random rnd = new Random();
 
-        private const int MAPCHUNKSIZE = 5;
+        private const int MAPCHUNKSIZE = 4;
+
+        private const int NCHUNK = MAPCHUNKSIZE * MAPCHUNKSIZE;
+
+        private static int ChunkGenerated = 0;
 
         private const int XSIZE = MAPCHUNKSIZE * 26 + 1;
         private const int YSIZE = MAPCHUNKSIZE * 9;
 
-        private static char[] wallChars = new char[]{'|', '_', '‾', '/', '\\'};
+        private static List<char> collisionChars = new List<char>() { '|', '_', '‾', '/', '\\' };
 
 
         public static void generateMap()
         {
-            int[][][] allChunkCoordinates = new int[MAPCHUNKSIZE][][];
+            ChunkGenerated = 0;
+            allChunkCoordinates = new int[MAPCHUNKSIZE][][];
 
             for (int x = 0; x < MAPCHUNKSIZE; x++)
             {
@@ -41,7 +47,7 @@ namespace ConsoleRPG2
                 for (int y = 0; y < MAPCHUNKSIZE; y++)
                 {
 
-                    int[] chunkCoordinates = new int[]{x, y};
+                    int[] chunkCoordinates = new int[] { x, y };
                     allChunkCoordinates[x][y] = chunkCoordinates;
 
                     if (mapChunks.Count == 0)
@@ -129,6 +135,7 @@ namespace ConsoleRPG2
                     {
                         mapChunks[allChunkCoordinates[x][y]] = "o";
                     }
+                    Console.WriteLine($"Génération... ({ChunkGenerated++}/{NCHUNK})"); ;
                 }
             }
             using StreamWriter outputFile = new StreamWriter("map.txt");
@@ -176,6 +183,25 @@ namespace ConsoleRPG2
             map[x][y] = val;
         }
 
+        public static void DrawChunk(int X, int Y)
+        {
+            Console.Clear();
+            for (int y = Y * 9; y < Y * 9 + 9; y++)
+            {
+                for (int x = X * 26; x < X * 26 + 26; x++)
+                {
+                    Console.Write(map[x][y]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public static int[] getPlayerCurrentChunk(Player player)
+        {
+            int[] playerChunk = new int[] { player.PlayerXPos / 26, player.PlayerYPos / 9 };
+            return playerChunk;
+        }
+
         public static void DisplayMap()
         {
             Console.Clear();
@@ -190,12 +216,12 @@ namespace ConsoleRPG2
 
         public static void UpdateMapPlayerPos(Player player)
         {
-            if (!wallChars.Contains(map[previousPlayerPosition[0]][previousPlayerPosition[1]]))
+            if (!collisionChars.Contains(map[previousPlayerPosition[0]][previousPlayerPosition[1]]))
             {
                 map[previousPlayerPosition[0]][previousPlayerPosition[1]] = ' ';
             }
 
-            map[player.getPlayerXPos()][player.getPlayerYPos()] = playerToken;
+            map[player.PlayerXPos][player.PlayerYPos] = playerToken;
         }
 
         public static int getXsize()
@@ -208,9 +234,27 @@ namespace ConsoleRPG2
             return YSIZE;
         }
 
-        public static char[] getWallChars()
+        public static int getChunkGenerated()
         {
-            return wallChars;
+            return ChunkGenerated;
+        }
+
+        public static int getNchunk()
+        {
+            return NCHUNK;
+        }
+
+        public static List<char> getCollisionChars()
+        {
+            return collisionChars;
+        }
+
+        public static void addCollisionChar(char a)
+        {
+            if (!collisionChars.Contains(a))
+            {
+                collisionChars.Add(a);
+            }
         }
 
         public static void setPreviousPlayerPos(int x, int y)
@@ -219,8 +263,32 @@ namespace ConsoleRPG2
             previousPlayerPosition[1] = y;
         }
 
+        public static void InitializeEnemiesPosition(Enemy[] enemies)
+        {
+            int nextXPos;
+            int nextYPos;
+            foreach (Enemy enemy in enemies)
+            {
+                do
+                {
+                    nextXPos = rnd.Next(5, XSIZE - 5);
+                    nextYPos = rnd.Next(3, YSIZE - 3);
+                } while (collisionChars.Contains(map[nextXPos][nextYPos]) || map[nextXPos][nextYPos] == playerToken || mapChunks[allChunkCoordinates[nextXPos / 26][nextYPos / 9]] == "void");
+
+                enemy.setPos(nextXPos, nextYPos);
+                map[enemy.getXpos()][enemy.getYpos()] = enemy.getDisplayToken();
+            }
+        }
+
+        public static void UpdateEnemyPosition(Enemy enemy)
+        {
+
+        }
+
         public static bool isMapOk()
         {
+            Console.Clear();
+            DisplayMap();
             Console.WriteLine("Cette map vous convient-elle ? (O/N)");
             return Console.ReadLine()!.ToLower() switch
             {

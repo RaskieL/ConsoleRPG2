@@ -188,131 +188,155 @@ namespace ConsoleRPG2
         }
 
         // Met à jour le modificateur de force
-        public void updateStrengthMod(){
+        public void updateStrengthMod()
+        {
             this.StrengthMod = (this.Strength - 10) / 2;
         }
 
         // Met à jour le modificateur de dexterité
-         public void updateDexterityMod(){
+        public void updateDexterityMod()
+        {
             this.DexterityMod = (this.Dexterity - 10) / 2;
         }
 
         // Met à jour le modificateur de constitution
-         public void updateConstitutionMod(){
+        public void updateConstitutionMod()
+        {
             this.ConstitutionMod = (this.Constitution - 10) / 2;
         }
 
         // Met à jour le modificateur de sagesse
-         public void updateWisdomMod(){
+        public void updateWisdomMod()
+        {
             this.WisdomMod = (this.Wisdom - 10) / 2;
         }
 
         // Met à jour le modificateur d'intelligence
-         public void updateIntelligenceMod(){
+        public void updateIntelligenceMod()
+        {
             this.IntelligenceMod = (this.Intelligence - 10) / 2;
         }
 
         // Met à jour le modificateur de charisme
-         public void updateCharismaMod(){
+        public void updateCharismaMod()
+        {
             this.CharismaMod = (this.Charisma - 10) / 2;
         }
 
         // Met à jour les pv maximum au niveau 1
-        public void updateInitialHPMax(){
+        public void updateInitialHPMax()
+        {
             this.HPmax = 8 + this.ConstitutionMod;
             this.HP = this.HPmax;
         }
 
         // Met à jour la classe d'armure
-        public void updateAC(){
+        public void updateAC()
+        {
             this.playerAC = 10 + this.DexterityMod;
         }
 
         // Met à jour le modificateur d'initiative
-        public void updateInitiativeMod(){
+        public void updateInitiativeMod()
+        {
             this.InitiativeMod = this.DexterityMod;
         }
 
         // Méthode en accès écriture pour toutes les caractéristiques et met tout à jour.
-        public void setStats(int str, int dex, int con, int wis, int inte, int cha){
+        public void setStats(int str, int dex, int con, int wis, int inte, int cha)
+        {
             this.Strength = str;
             this.Dexterity = dex;
             this.Constitution = con;
             this.Wisdom = wis;
             this.Intelligence = inte;
             this.Charisma = cha;
-            this.updateAll();
+            this.UpdateAll();
         }
 
         // Accès en écriture pour la caractéristique de Force
-        public void setStrength(int value){
+        public void setStrength(int value)
+        {
             this.Strength = value;
         }
 
         // Accès en écriture pour la caractéristique de Dextérité
-        public void setDexterity(int value){
+        public void setDexterity(int value)
+        {
             this.Dexterity = value;
         }
 
         // Accès en écriture pour la caractéristique de Constitution
-        public void setConstitution(int value){
+        public void setConstitution(int value)
+        {
             this.Constitution = value;
         }
 
         // Accès en écriture pour la caractéristique de Sagesse
-        public void setWisdom(int value){
+        public void setWisdom(int value)
+        {
             this.Wisdom = value;
         }
 
         // Accès en écriture pour la caractéristique d'Intelligence
-        public void setIntelligence(int value){
+        public void setIntelligence(int value)
+        {
             this.Intelligence = value;
         }
 
         // Accès en écriture pour la caractéristique de Charisme
-        public void setCharisma(int value){
+        public void setCharisma(int value)
+        {
             this.Charisma = value;
         }
 
         // Accès en lecture pour la caractéristique de Force
-        public int getStrength(){
+        public int getStrength()
+        {
             return this.Strength;
         }
 
         // Accès en lecture pour la caractéristique de Dextérité
-        public int getDexterity(){
+        public int getDexterity()
+        {
             return this.Dexterity;
         }
 
         // Accès en lecture pour la caractéristique de Constitution
-        public int getConstitution(){
+        public int getConstitution()
+        {
             return this.Constitution;
         }
 
         // Accès en lecture pour la caractéristique de Sagesse
-        public int getWisdom(){
+        public int getWisdom()
+        {
             return this.Wisdom;
         }
 
         // Accès en lecture pour la caractéristique de Intelligence
-        public int getIntelligence(){
+        public int getIntelligence()
+        {
             return this.Intelligence;
         }
 
         // Accès en lecture pour la caractéristique de Charisme
-        public int getCharisma(){
+        public int GetCharisma()
+        {
             return this.Charisma;
         }
 
         // Accès en lecture de toutes les statistiques sous forme de tableau
-        public int[] getStats(){
-            int[] stats = new int[]{this.getStrength(),this.getDexterity(),this.getConstitution(),this.getWisdom(),this.getIntelligence(),this.getCharisma()};
+        public int[] GetStats()
+        {
+            int[] stats = new int[] { this.getStrength(), this.getDexterity(), this.getConstitution(), this.getWisdom(), this.getIntelligence(), this.GetCharisma() };
             return stats;
         }
 
 
         // Met à jour tout.
-        public void updateAll(){
+        public void UpdateAll()
+        {
             this.updateStatMods();
             this.updateST();
             this.updateSkillMods();
@@ -322,7 +346,7 @@ namespace ConsoleRPG2
         }
 
         // Affichage de la fiche de personnage.
-        public void displayCharacterSheet()
+        public void DisplayCharacterSheet()
         {
             string plusminus = "";
             Console.WriteLine($"Nom: {this.playerName}");
@@ -362,92 +386,76 @@ namespace ConsoleRPG2
             Console.WriteLine($"JDS Charisme: {plusminus}{this.CharismaST} (Maitrisé: {this.isWisdomSTmastered})\n");
         }
 
-        public int getPlayerXPos(){
-            return this.playerXPos;
+        public int PlayerXPos => this.playerXPos;
+
+        public int PlayerYPos => this.playerYPos;
+
+        public void SetPlayerXPos(int x) => this.playerXPos = x;
+
+        public void SetPlayerYPos(int y) => this.playerYPos = y;
+
+        public void SetPlayerPos(int x, int y)
+        {
+            SetPlayerXPos(x);
+            SetPlayerYPos(y);
         }
 
-        public int getPlayerYPos(){
-            return this.playerYPos;
-        }
-
-        public void setPlayerXPos(int x){
-            this.playerXPos = x;
-        }
-
-        public void setPlayerYPos(int y){
-            this.playerYPos = y;
-        }
-
-        public void setPlayerPos(int x, int y){
-            setPlayerXPos(x);
-            setPlayerYPos(y);
-        }
-
-        public void setRandomPlayerPos(){
-            int rndX = rnd.Next(1,DrawMap.getXsize());
-            int rndY = rnd.Next(1,DrawMap.getYsize());
-            while(DrawMap.getWallChars().Contains(DrawMap.GetMap()[rndX][rndY])){
-                rndX = rnd.Next(1,DrawMap.getXsize());
-                rndY = rnd.Next(1,DrawMap.getYsize());
+        public void SetRandomPlayerPos()
+        {
+            int rndX = rnd.Next(1, DrawMap.getXsize());
+            int rndY = rnd.Next(1, DrawMap.getYsize());
+            while (DrawMap.getCollisionChars().Contains(DrawMap.GetMap()[rndX][rndY]))
+            {
+                rndX = rnd.Next(1, DrawMap.getXsize());
+                rndY = rnd.Next(1, DrawMap.getYsize());
             }
-            this.setPlayerPos(rndX,rndY);
+            this.SetPlayerPos(rndX, rndY);
         }
 
-        public void movePlayer(){
+        public void MovePlayer()
+        {
             DrawMap.setPreviousPlayerPos(this.playerXPos, this.playerYPos);
+            Dictionary<string, char> surroundingChars = CheckPlayerSurroundings();
 
-            char upChar = '/';
-            char rightChar = '/';
-            char leftChar = '/';
-            char botChar = '/';
-
-            try{
-                upChar = DrawMap.GetMap()[this.playerXPos][this.playerYPos-1];
-            }catch(Exception){
-
-            }
-
-            try{
-                rightChar = DrawMap.GetMap()[this.playerXPos+1][this.playerYPos];
-            }catch(Exception){
-
-            }
-
-            try{
-                leftChar = DrawMap.GetMap()[this.playerXPos-1][this.playerYPos];
-            }catch(Exception){
-
-            }
-
-            try{
-                botChar = DrawMap.GetMap()[this.playerXPos][this.playerYPos+1];
-            }catch(Exception){
-
-            }
-            Console.WriteLine($"Upchar: {upChar} Botchar: {botChar} LeftChar: {leftChar} RightChar: {rightChar}");
-            
-            switch(Console.ReadKey().Key){
+            Console.WriteLine($"Upchar: {surroundingChars["upChar"]} Botchar: {surroundingChars["botChar"]} LeftChar: {surroundingChars["leftChar"]} RightChar: {surroundingChars["rightChar"]}");
+            switch (Console.ReadKey().Key)
+            {
                 case ConsoleKey.UpArrow:
-                if(!DrawMap.getWallChars().Contains(upChar) && this.playerYPos-1 > 0 && this.playerYPos-1 < DrawMap.getYsize()){
+                    if (!DrawMap.getCollisionChars().Contains(surroundingChars["upChar"]) && this.playerYPos - 1 > 0 && this.playerYPos - 1 < DrawMap.getYsize())
+                    {
                         this.playerYPos -= 1;
-                }
-                break;
+                    }
+                    break;
                 case ConsoleKey.DownArrow:
-                if(!DrawMap.getWallChars().Contains(botChar) && this.playerYPos+1 > 0 && this.playerYPos+1 < DrawMap.getYsize()){
-                    this.playerYPos +=1;
-                }
-                break;
+                    if (!DrawMap.getCollisionChars().Contains(surroundingChars["botChar"]) && this.playerYPos + 1 > 0 && this.playerYPos + 1 < DrawMap.getYsize())
+                    {
+                        this.playerYPos += 1;
+                    }
+                    break;
                 case ConsoleKey.LeftArrow:
-                if(!DrawMap.getWallChars().Contains(leftChar) && this.playerXPos-1 > 0 && this.playerXPos-1 < DrawMap.getXsize()){
-                    this.playerXPos -=1;
-                }
-                break;
+                    if (!DrawMap.getCollisionChars().Contains(surroundingChars["leftChar"]) && this.playerXPos - 1 > 0 && this.playerXPos - 1 < DrawMap.getXsize())
+                    {
+                        this.playerXPos -= 1;
+                    }
+                    break;
                 case ConsoleKey.RightArrow:
-                if(!DrawMap.getWallChars().Contains(rightChar) && this.playerXPos+1 > 0 && this.playerXPos+1 < DrawMap.getXsize()){
-                    this.playerXPos +=1;
-                }
-                break;
+                    if (!DrawMap.getCollisionChars().Contains(surroundingChars["rightChar"]) && this.playerXPos + 1 > 0 && this.playerXPos + 1 < DrawMap.getXsize())
+                    {
+                        this.playerXPos += 1;
+                    }
+                    break;
             }
+        }
+
+        public Dictionary<string,char> CheckPlayerSurroundings(){
+            Dictionary<string,char> surroundingChars = new()
+            {
+                { "upChar", DrawMap.GetMap()[this.playerXPos][this.playerYPos - 1] },
+                { "rightChar", DrawMap.GetMap()[this.playerXPos + 1][this.playerYPos] },
+                { "leftChar", DrawMap.GetMap()[this.playerXPos - 1][this.playerYPos] },
+                { "botChar", DrawMap.GetMap()[this.playerXPos][this.playerYPos + 1] }
+            };
+            return surroundingChars;
         }
     }
 }

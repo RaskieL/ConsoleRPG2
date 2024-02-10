@@ -74,7 +74,7 @@ namespace ConsoleRPG2
                 Console.WriteLine($"[3] - Constitution ({player.getConstitution()})");
                 Console.WriteLine($"[4] - Sagesse ({player.getWisdom()})");
                 Console.WriteLine($"[5] - Intelligence ({player.getIntelligence()})");
-                Console.WriteLine($"[6] - Charisme ({player.getCharisma()})");
+                Console.WriteLine($"[6] - Charisme ({player.GetCharisma()})");
                 Console.WriteLine($"[7] - Tout assigner aléatoirement");
                 Console.WriteLine($"[8] - Reroll");
                 Console.WriteLine("\nVotre choix:");
@@ -130,11 +130,11 @@ namespace ConsoleRPG2
                     }
                     break;
                     case "6":
-                    if(player.getCharisma() == 0){
+                    if(player.GetCharisma() == 0){
                         player.setCharisma(rolls[0]);
                         rolls.RemoveAt(0);
                     }else{
-                        int temp = player.getCharisma();
+                        int temp = player.GetCharisma();
                         player.setCharisma(rolls[0]);
                         rolls[0] = temp;
                     }

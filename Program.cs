@@ -3,59 +3,67 @@ using System.Security.Claims;
 
 namespace ConsoleRPG2
 {
-    public class Program{
+    public class Program
+    {
         Player player = new Player("Unknown");
-        
-        public void Run(){
-            
+        Enemy[]? enemies;
+        public void Run()
+        {
+
             StateMachine.addState("main_menu");
-            while (true){
+            while (true)
+            {
                 string currentState = StateMachine.getCurrentState();
 
-                switch (currentState){
+                switch (currentState)
+                {
 
                     case "generate_map":
-                    do{
-                        Console.WriteLine("Génération...");
-                        DrawMap.generateMap();
-                        Console.WriteLine("Lecture de la carte...");
-                        DrawMap.ReadMap();
-                        Console.Clear();
-                        DrawMap.DisplayMap();
-                    }while(!DrawMap.isMapOk());
-                    //player.setRandomPlayerPos();
-                    StateMachine.removeLastState();
-                    break;
+                        do
+                        {
+                            DrawMap.generateMap();
+                            Console.WriteLine("Lecture de la carte...");
+                            DrawMap.ReadMap();
+                        } while (!DrawMap.isMapOk());
+
+                        DrawMap.UpdateMapPlayerPos(player);
+                        enemies = Enemy.InitiateEnemies(10);
+                        DrawMap.InitializeEnemiesPosition(enemies);
+                        StateMachine.removeLastState();
+                        break;
 
                     case "main_menu":
                         StateMachine.updateCurrentState(Main_menu.mainMenu());
-                        if(StateMachine.getCurrentState().Equals("character_creation")){
+                        if (StateMachine.getCurrentState().Equals("character_creation"))
+                        {
                             StateMachine.addState("generate_map");
                         }
                         break;
 
                     case "character_creation":
-                        try{
+                        try
+                        {
                             player = Character_creator.characterCreator()!;
                             Character_creator.playerStatAssignationScreen(player);
-                            player.updateAll();
-                            StateMachine.updateCurrentState("player_action");
+                            player.UpdateAll();
+                            StateMachine.updateCurrentState("play_state");
                         }
-                        catch (Exception){
+                        catch (Exception)
+                        {
                             displayError($"Une erreur est survenue lors de la création du personnage. Assurez-vous d'entrer un nom correct");
                         }
                         break;
 
-                    case "player_action":
-                    player.movePlayer();
-                    DrawMap.UpdateMapPlayerPos(player);
-                    DrawMap.DisplayMap();
-                    Console.WriteLine($"XPOS: {player.getPlayerXPos()} YPOS: {player.getPlayerYPos(
-                    )}");
-                    break;
+                    case "play_state":
+                        int[] playersChunk = DrawMap.getPlayerCurrentChunk(player);
+                        DrawMap.DrawChunk(playersChunk[0], playersChunk[1]);
+                        Console.WriteLine($"XPOS: {player.PlayerXPos} YPOS: {player.PlayerYPos}");
+                        player.MovePlayer();
+                        DrawMap.UpdateMapPlayerPos(player);
+                        break;
 
                     case "game_menu":
-                        player.displayCharacterSheet();
+                        player.DisplayCharacterSheet();
                         Console.ReadLine();
                         break;
 
@@ -66,11 +74,13 @@ namespace ConsoleRPG2
             }
         }
 
-        public static void Main(string[] args){
+        public static void Main(string[] args)
+        {
             Program program = new Program();
             program.Run();
         }
-        public static void displayError(string errormessage){
+        public static void displayError(string errormessage)
+        {
             Console.Clear();
             Console.WriteLine(errormessage);
             Console.WriteLine("\nAppuyez sur Entrer pour continuer");
