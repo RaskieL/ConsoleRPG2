@@ -4,7 +4,7 @@ namespace ConsoleRPG2
     {
 
         // Régit les états du jeu
-        private static List<string> States = new List<string>();
+        private static List<Object> States = new List<Object>();
 
 
         // Retire le dernier état ajouté
@@ -20,13 +20,13 @@ namespace ConsoleRPG2
         }
 
         // Renvoie l'état courant
-        public static string getCurrentState()
+        public static Object getCurrentState()
         {
             return States.First();
         }
 
         // Renvoie l'état à l'index voulu
-        public static string getState(int index)
+        public static Object getState(int index)
         {
             return States.ElementAt(index);
         }

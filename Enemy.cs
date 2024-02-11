@@ -3,6 +3,7 @@ namespace ConsoleRPG2
     public class Enemy
     {
         private static Random rnd = new Random();
+        private static List<char> EnemyTokens = [];
 
         private string EnemyName;
         private int XPos;
@@ -25,15 +26,17 @@ namespace ConsoleRPG2
             this.XPReward = xpreward;
             this.enemyToken = token;
             DrawMap.addCollisionChar(this.enemyToken);
+            EnemyTokens.Add(this.enemyToken);
         }
 
-        public static Enemy[] InitiateEnemies(int numberOfEnemies)
+        public static Enemy[] InitializeEnemies(int numberOfEnemies)
         {
             Enemy[] enemies = new Enemy[numberOfEnemies];
             for (int i = 0; i < numberOfEnemies; i++)
             {
                 enemies[i] = new Enemy("Goblin", 12, 1, 14, 20, 'o');
             }
+            DrawMap.InitializeEnemiesPosition(enemies);
             return enemies;
         }
 
@@ -71,5 +74,8 @@ namespace ConsoleRPG2
             return this.enemyToken;
         }
 
+        public static List<char> getEnemyTokenList(){
+            return EnemyTokens;
+        }
     }
 }

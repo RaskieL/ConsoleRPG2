@@ -412,39 +412,64 @@ namespace ConsoleRPG2
             this.SetPlayerPos(rndX, rndY);
         }
 
-        public void MovePlayer()
+        public void PlayerAction()
         {
             DrawMap.setPreviousPlayerPos(this.playerXPos, this.playerYPos);
             Dictionary<string, char> surroundingChars = CheckPlayerSurroundings();
-
+            List<Enemy> EnemiesInRoom = this.isEnemyinRoom();
+            Console.WriteLine($"XPOS: {this.PlayerXPos} YPOS: {this.PlayerYPos}");
             Console.WriteLine($"Upchar: {surroundingChars["upChar"]} Botchar: {surroundingChars["botChar"]} LeftChar: {surroundingChars["leftChar"]} RightChar: {surroundingChars["rightChar"]}");
+            Console.WriteLine($"{EnemiesInRoom.Count()} ENEMY IN ROOM");
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.UpArrow:
                     if (!DrawMap.getCollisionChars().Contains(surroundingChars["upChar"]) && this.playerYPos - 1 > 0 && this.playerYPos - 1 < DrawMap.getYsize())
                     {
                         this.playerYPos -= 1;
+                        DrawMap.UpdateMapPlayerPos(this);
                     }
                     break;
                 case ConsoleKey.DownArrow:
                     if (!DrawMap.getCollisionChars().Contains(surroundingChars["botChar"]) && this.playerYPos + 1 > 0 && this.playerYPos + 1 < DrawMap.getYsize())
                     {
                         this.playerYPos += 1;
+                        DrawMap.UpdateMapPlayerPos(this);
                     }
                     break;
                 case ConsoleKey.LeftArrow:
                     if (!DrawMap.getCollisionChars().Contains(surroundingChars["leftChar"]) && this.playerXPos - 1 > 0 && this.playerXPos - 1 < DrawMap.getXsize())
                     {
                         this.playerXPos -= 1;
+                        DrawMap.UpdateMapPlayerPos(this);
                     }
                     break;
                 case ConsoleKey.RightArrow:
                     if (!DrawMap.getCollisionChars().Contains(surroundingChars["rightChar"]) && this.playerXPos + 1 > 0 && this.playerXPos + 1 < DrawMap.getXsize())
                     {
                         this.playerXPos += 1;
+                        DrawMap.UpdateMapPlayerPos(this);
                     }
                     break;
             }
+            
+        }
+
+        public List<Enemy> isEnemyinRoom(){
+            List<Enemy> enemyInRoom = [];
+            int[] playercurrentchunk = this.getPlayerCurrentChunk();
+            foreach(Enemy enemy in Program.enemies!){
+                int[] enemyCurrentChunk = {enemy.getXpos()/26, enemy.getYpos()/9};
+                if(enemyCurrentChunk[0] == playercurrentchunk[0] && enemyCurrentChunk[1] == playercurrentchunk[1]){
+                    enemyInRoom.Add(enemy);
+                }
+            }
+            return enemyInRoom;
+        }
+
+        public int[] getPlayerCurrentChunk()
+        {
+            int[] playerChunk = new int[] { this.PlayerXPos / 26, this.PlayerYPos / 9 };
+            return playerChunk;
         }
 
         public Dictionary<string,char> CheckPlayerSurroundings(){

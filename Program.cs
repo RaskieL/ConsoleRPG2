@@ -5,15 +5,15 @@ namespace ConsoleRPG2
 {
     public class Program
     {
-        Player player = new Player("Unknown");
-        Enemy[]? enemies;
+        public static Player player = new Player("Unknown");
+        public static Enemy[]? enemies;
         public void Run()
         {
 
             StateMachine.addState("main_menu");
             while (true)
             {
-                string currentState = StateMachine.getCurrentState();
+                Object currentState = StateMachine.getCurrentState();
 
                 switch (currentState)
                 {
@@ -27,8 +27,7 @@ namespace ConsoleRPG2
                         } while (!DrawMap.isMapOk());
 
                         DrawMap.UpdateMapPlayerPos(player);
-                        enemies = Enemy.InitiateEnemies(10);
-                        DrawMap.InitializeEnemiesPosition(enemies);
+                        enemies = Enemy.InitializeEnemies(10);
                         StateMachine.removeLastState();
                         break;
 
@@ -55,11 +54,10 @@ namespace ConsoleRPG2
                         break;
 
                     case "play_state":
-                        int[] playersChunk = DrawMap.getPlayerCurrentChunk(player);
+                        int[] playersChunk = player.getPlayerCurrentChunk();
+                        //DrawMap.DisplayMap();
                         DrawMap.DrawChunk(playersChunk[0], playersChunk[1]);
-                        Console.WriteLine($"XPOS: {player.PlayerXPos} YPOS: {player.PlayerYPos}");
-                        player.MovePlayer();
-                        DrawMap.UpdateMapPlayerPos(player);
+                        player.PlayerAction();
                         break;
 
                     case "game_menu":

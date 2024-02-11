@@ -196,12 +196,6 @@ namespace ConsoleRPG2
             }
         }
 
-        public static int[] getPlayerCurrentChunk(Player player)
-        {
-            int[] playerChunk = new int[] { player.PlayerXPos / 26, player.PlayerYPos / 9 };
-            return playerChunk;
-        }
-
         public static void DisplayMap()
         {
             Console.Clear();
