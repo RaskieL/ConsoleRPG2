@@ -13,7 +13,7 @@ namespace ConsoleRPG2
             StateMachine.addState("main_menu");
             while (true)
             {
-                Object currentState = StateMachine.getCurrentState();
+                object currentState = StateMachine.getCurrentState();
 
                 switch (currentState)
                 {
@@ -32,11 +32,29 @@ namespace ConsoleRPG2
                         break;
 
                     case "main_menu":
-                        StateMachine.updateCurrentState(Main_menu.mainMenu());
+                        string nextState = Main_menu.mainMenu();
+                        if(nextState != "main_menu"){
+                            StateMachine.addState(nextState);
+                        }
                         if (StateMachine.getCurrentState().Equals("character_creation"))
                         {
                             StateMachine.addState("generate_map");
                         }
+                        break;
+
+                    case "load_menu":
+                        Main_menu.loadMenu();
+                        StateMachine.removeLastState();
+                        break;
+                    
+                    case "settings_menu":
+                        Main_menu.settingsMenu();
+                        StateMachine.removeLastState();
+                        break;
+                    
+                    case "game_exit":
+                        Main_menu.exitMenu();
+                        StateMachine.removeLastState();
                         break;
 
                     case "character_creation":
@@ -55,7 +73,6 @@ namespace ConsoleRPG2
 
                     case "play_state":
                         int[] playersChunk = player.getPlayerCurrentChunk();
-                        //DrawMap.DisplayMap();
                         DrawMap.DrawChunk(playersChunk[0], playersChunk[1]);
                         player.PlayerAction();
                         break;

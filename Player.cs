@@ -386,20 +386,26 @@ namespace ConsoleRPG2
             Console.WriteLine($"JDS Charisme: {plusminus}{this.CharismaST} (Maitrisé: {this.isWisdomSTmastered})\n");
         }
 
+        // Accès en lecture pour la position X du joueur
         public int PlayerXPos => this.playerXPos;
 
+        // Accès en lecture pour la position Y du joueur
         public int PlayerYPos => this.playerYPos;
 
+        // Accès en ecriture pour la position X du joueur
         public void SetPlayerXPos(int x) => this.playerXPos = x;
 
+        // Accès en ecriture pour la position y du joueur
         public void SetPlayerYPos(int y) => this.playerYPos = y;
 
+        // Accès en ecriture pour la position du joueur
         public void SetPlayerPos(int x, int y)
         {
             SetPlayerXPos(x);
             SetPlayerYPos(y);
         }
 
+        // Permet de faire apparaitre le joueur à un point aléatoire sur la carte (ps encore au point)
         public void SetRandomPlayerPos()
         {
             int rndX = rnd.Next(1, DrawMap.getXsize());
@@ -412,49 +418,90 @@ namespace ConsoleRPG2
             this.SetPlayerPos(rndX, rndY);
         }
 
+        // Fonction traitant les actions du joueur
         public void PlayerAction()
         {
             DrawMap.setPreviousPlayerPos(this.playerXPos, this.playerYPos);
             Dictionary<string, char> surroundingChars = CheckPlayerSurroundings();
-            List<Enemy> EnemiesInRoom = this.isEnemyinRoom();
-            Console.WriteLine($"XPOS: {this.PlayerXPos} YPOS: {this.PlayerYPos}");
-            Console.WriteLine($"Upchar: {surroundingChars["upChar"]} Botchar: {surroundingChars["botChar"]} LeftChar: {surroundingChars["leftChar"]} RightChar: {surroundingChars["rightChar"]}");
+            List<Enemy> EnemiesInRoom = this.EnemyinRoom();
+            
+            // Lignes de debugging
+            //Console.WriteLine($"XPOS: {this.PlayerXPos} YPOS: {this.PlayerYPos}");
+            //Console.WriteLine($"Upchar: {surroundingChars["upChar"]} Botchar: {surroundingChars["botChar"]} LeftChar: {surroundingChars["leftChar"]} RightChar: {surroundingChars["rightChar"]}");
+
+            // Affichage du menu d'action du joueur
             Console.WriteLine($"{EnemiesInRoom.Count()} ENEMY IN ROOM");
+            PlayerActionMenu.DisplayActionMenu();
+
+            // Lit les input du joueur
             switch (Console.ReadKey().Key)
             {
-                case ConsoleKey.UpArrow:
+                case ConsoleKey.Z: // Mouvement vers le haut
                     if (!DrawMap.getCollisionChars().Contains(surroundingChars["upChar"]) && this.playerYPos - 1 > 0 && this.playerYPos - 1 < DrawMap.getYsize())
                     {
                         this.playerYPos -= 1;
                         DrawMap.UpdateMapPlayerPos(this);
                     }
                     break;
-                case ConsoleKey.DownArrow:
+                case ConsoleKey.S: // Mouvement vers le bas
                     if (!DrawMap.getCollisionChars().Contains(surroundingChars["botChar"]) && this.playerYPos + 1 > 0 && this.playerYPos + 1 < DrawMap.getYsize())
                     {
                         this.playerYPos += 1;
                         DrawMap.UpdateMapPlayerPos(this);
                     }
                     break;
-                case ConsoleKey.LeftArrow:
+                case ConsoleKey.Q: // Mouvement vers la gauche
                     if (!DrawMap.getCollisionChars().Contains(surroundingChars["leftChar"]) && this.playerXPos - 1 > 0 && this.playerXPos - 1 < DrawMap.getXsize())
                     {
                         this.playerXPos -= 1;
                         DrawMap.UpdateMapPlayerPos(this);
                     }
                     break;
-                case ConsoleKey.RightArrow:
+                case ConsoleKey.D: // Mouvement vers la droite
                     if (!DrawMap.getCollisionChars().Contains(surroundingChars["rightChar"]) && this.playerXPos + 1 > 0 && this.playerXPos + 1 < DrawMap.getXsize())
                     {
                         this.playerXPos += 1;
                         DrawMap.UpdateMapPlayerPos(this);
                     }
                     break;
+                
+                case ConsoleKey.D0:
+                    PlayerActionMenu.ActionMenu(0);
+                    break;
+                case ConsoleKey.D1:
+                    PlayerActionMenu.ActionMenu(1);
+                    break;
+                case ConsoleKey.D2:
+                    PlayerActionMenu.ActionMenu(2);
+                    break;
+                case ConsoleKey.D3:
+                    PlayerActionMenu.ActionMenu(3);
+                    break;
+                case ConsoleKey.D4:
+                    PlayerActionMenu.ActionMenu(4);
+                    break;
+                case ConsoleKey.D5:
+                    PlayerActionMenu.ActionMenu(5);
+                    break;
+                case ConsoleKey.D6:
+                    PlayerActionMenu.ActionMenu(6);
+                    break;
+                case ConsoleKey.D7:
+                    PlayerActionMenu.ActionMenu(7);
+                    break;
+                case ConsoleKey.D8:
+                    PlayerActionMenu.ActionMenu(8);
+                    break;
+                case ConsoleKey.D9:
+                    PlayerActionMenu.ActionMenu(9);
+                    break;
             }
+            
             
         }
 
-        public List<Enemy> isEnemyinRoom(){
+        // Renvoie la liste des ennemies dans la même salle que le joueur
+        public List<Enemy> EnemyinRoom(){
             List<Enemy> enemyInRoom = [];
             int[] playercurrentchunk = this.getPlayerCurrentChunk();
             foreach(Enemy enemy in Program.enemies!){
@@ -466,12 +513,14 @@ namespace ConsoleRPG2
             return enemyInRoom;
         }
 
+        // Renvoie sous forme de tableau le chunk courant du joueur
         public int[] getPlayerCurrentChunk()
         {
             int[] playerChunk = new int[] { this.PlayerXPos / 26, this.PlayerYPos / 9 };
             return playerChunk;
         }
 
+        // Renvoie sous forme de dictionnaire, les caractères autour du joueur
         public Dictionary<string,char> CheckPlayerSurroundings(){
             Dictionary<string,char> surroundingChars = new()
             {
