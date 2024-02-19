@@ -1,0 +1,15 @@
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/ConsoleRPG2.csproj.AssemblyReference.cache
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/ConsoleRPG2.GeneratedMSBuildEditorConfig.editorconfig
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/ConsoleRPG2.AssemblyInfoInputs.cache
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/ConsoleRPG2.AssemblyInfo.cs
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/ConsoleRPG2.csproj.CoreCompileInputs.cache
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/bin/Debug/net7.0/ConsoleRPG2
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/bin/Debug/net7.0/ConsoleRPG2.deps.json
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/bin/Debug/net7.0/ConsoleRPG2.runtimeconfig.json
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/bin/Debug/net7.0/ConsoleRPG2.dll
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/bin/Debug/net7.0/ConsoleRPG2.pdb
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/ConsoleRPG2.dll
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/refint/ConsoleRPG2.dll
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/ConsoleRPG2.pdb
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/ConsoleRPG2.genruntimeconfig.cache
+/home/raskiel/Bureau/Code/Perso/ConsoleRPG2/obj/Debug/net7.0/ref/ConsoleRPG2.dll

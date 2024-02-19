@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 
 namespace ConsoleRPG2
@@ -6,6 +7,7 @@ namespace ConsoleRPG2
     public class Program
     {
         public static Player player = new Player("Unknown");
+        public static int[]? playersChunk;
         public static Enemy[]? enemies;
         public void Run()
         {
@@ -17,7 +19,6 @@ namespace ConsoleRPG2
 
                 switch (currentState)
                 {
-
                     case "generate_map":
                         do
                         {
@@ -72,7 +73,7 @@ namespace ConsoleRPG2
                         break;
 
                     case "play_state":
-                        int[] playersChunk = player.getPlayerCurrentChunk();
+                        playersChunk = player.getPlayerCurrentChunk();
                         DrawMap.DrawChunk(playersChunk[0], playersChunk[1]);
                         player.PlayerAction();
                         break;
@@ -80,6 +81,26 @@ namespace ConsoleRPG2
                     case "game_menu":
                         player.DisplayCharacterSheet();
                         Console.ReadLine();
+                        break;
+
+                    case Combat:
+                        Combat? combat = StateMachine.getCurrentState() as Combat;
+                        List<object> initiativeOrder = combat!.getInitiativeOrder();
+                        playersChunk = player.getPlayerCurrentChunk();
+                        combat!.displayInitiativeOrder();
+                        for(int i = initiativeOrder.Count()-1; i >=0; i--){
+                            if(StateMachine.getCurrentState() is not Combat){
+                                break;
+                            }
+                            if(initiativeOrder[i] is Player){
+                                player.initMoveMarker();
+                                player.PlayerCombatAction();
+                            }else{
+                                DrawMap.DrawChunk(playersChunk[0], playersChunk[1]);
+                                Enemy? enemy = initiativeOrder[i] as Enemy;
+                                Console.WriteLine($"Tour de l'ennemi {enemy!.getName()}");
+                            }
+                        }
                         break;
 
                     default:

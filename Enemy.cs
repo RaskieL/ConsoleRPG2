@@ -3,7 +3,7 @@ namespace ConsoleRPG2
     public class Enemy
     {
         private static Random rnd = new Random();
-        private static List<char> EnemyTokens = [];
+        private static List<char> EnemyTokens = new List<char>();
 
         private string EnemyName;
         private int XPos;
@@ -27,6 +27,10 @@ namespace ConsoleRPG2
             this.enemyToken = token;
             DrawMap.addCollisionChar(this.enemyToken);
             EnemyTokens.Add(this.enemyToken);
+        }
+
+        public string getName(){
+            return this.EnemyName;
         }
 
         public static Enemy[] InitializeEnemies(int numberOfEnemies)

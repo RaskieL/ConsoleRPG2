@@ -138,6 +138,10 @@ namespace ConsoleRPG2
             this.HP = HPmax;
             this.HPtemp = 0;
             this.InitiativeMod = this.DexterityMod;
+
+            this.moveMarkerX = this.playerXPos + 1;
+            this.moveMarkerY = this.playerYPos;
+            this.availableMovement = this.MoveDistance;
         }
 
         // Met à jour les modificateurs de caractéristiques.
@@ -333,6 +337,15 @@ namespace ConsoleRPG2
             return stats;
         }
 
+        public int getInitiativeMod()
+        {
+            return this.InitiativeMod;
+        }
+
+        public string getName()
+        {
+            return this.playerName;
+        }
 
         // Met à jour tout.
         public void UpdateAll()
@@ -397,6 +410,11 @@ namespace ConsoleRPG2
 
         // Accès en ecriture pour la position y du joueur
         public void SetPlayerYPos(int y) => this.playerYPos = y;
+        int moveMarkerX = 1;
+        int moveMarkerY = 1;
+        int availableMovement = 1;
+        bool isPlayersTurn = true;
+        bool canMove = true;
 
         // Accès en ecriture pour la position du joueur
         public void SetPlayerPos(int x, int y)
@@ -424,7 +442,7 @@ namespace ConsoleRPG2
             DrawMap.setPreviousPlayerPos(this.playerXPos, this.playerYPos);
             Dictionary<string, char> surroundingChars = CheckPlayerSurroundings();
             List<Enemy> EnemiesInRoom = this.EnemyinRoom();
-            
+
             // Lignes de debugging
             //Console.WriteLine($"XPOS: {this.PlayerXPos} YPOS: {this.PlayerYPos}");
             //Console.WriteLine($"Upchar: {surroundingChars["upChar"]} Botchar: {surroundingChars["botChar"]} LeftChar: {surroundingChars["leftChar"]} RightChar: {surroundingChars["rightChar"]}");
@@ -464,7 +482,7 @@ namespace ConsoleRPG2
                         DrawMap.UpdateMapPlayerPos(this);
                     }
                     break;
-                
+
                 case ConsoleKey.D0:
                     PlayerActionMenu.ActionMenu(0);
                     break;
@@ -496,17 +514,189 @@ namespace ConsoleRPG2
                     PlayerActionMenu.ActionMenu(9);
                     break;
             }
-            
-            
+            if (EnemiesInRoom.Count() != 0)
+            {
+                if (StateMachine.getCurrentState() is not Combat)
+                {
+                    Combat combat = new Combat(this, EnemiesInRoom);
+                    StateMachine.addState(combat);
+                }
+            }
+            else
+            {
+                if (StateMachine.getCurrentState() is Combat)
+                {
+                    StateMachine.removeLastState();
+                }
+            }
+        }
+
+        public void initMoveMarker()
+        {
+            this.moveMarkerX = this.PlayerXPos;
+            this.moveMarkerY = this.PlayerYPos;
+            if (this.availableMovement <= 0)
+            {
+                this.availableMovement = this.MoveDistance;
+            }
+        }
+
+        public void setPlayersTurn(bool b)
+        {
+            this.isPlayersTurn = b;
+        }
+        public bool getIsPlayersTurn()
+        {
+            return this.isPlayersTurn;
+        }
+
+        public int getMoveDistance()
+        {
+            return this.MoveDistance;
+        }
+
+        public int getAvailableMovement()
+        {
+            return this.availableMovement;
+        }
+
+        public int getMoveMarkerPosX()
+        {
+            return this.moveMarkerX;
+        }
+
+        public int getMoveMarkerPosY()
+        {
+            return this.moveMarkerY;
+        }
+
+        public void PlayerCombatAction()
+        {
+            this.canMove = true;
+            this.isPlayersTurn = true;
+            int tempMaxMove = this.MoveDistance;
+            do
+            {
+                int[] currentChunk = this.getPlayerCurrentChunk();
+                DrawMap.DrawChunk(currentChunk[0], currentChunk[1]);
+                DrawMap.setPreviousPlayerPos(this.playerXPos, this.playerYPos);
+                DrawMap.setPreviousMoveMarkerPos(this.moveMarkerX, this.moveMarkerY);
+                int nextavailablemovement;
+                Dictionary<string, char> surroundingChars = new()
+                {
+                    { "upChar", DrawMap.GetMap()[this.moveMarkerX][this.moveMarkerY - 1] },
+                    { "rightChar", DrawMap.GetMap()[this.moveMarkerX + 1][this.moveMarkerY] },
+                    { "leftChar", DrawMap.GetMap()[this.moveMarkerX - 1][this.moveMarkerY] },
+                    { "botChar", DrawMap.GetMap()[this.moveMarkerX][this.moveMarkerY + 1] }
+                };
+
+                PlayerActionMenu.DisplayCombatActionMenu(this);
+                Console.WriteLine(StateMachine.getCurrentState());
+
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.Z: // Mouvement vers le haut
+                        nextavailablemovement = tempMaxMove - Convert.ToInt32(Math.Sqrt(Math.Pow(this.moveMarkerX - this.playerXPos, 2) + Math.Pow(this.moveMarkerY - 1 - this.PlayerYPos, 2)));
+                        if (!DrawMap.getCollisionChars().Contains(surroundingChars["upChar"]) && this.moveMarkerY - 1 > 0 && this.moveMarkerY - 1 < DrawMap.getYsize() && PlayerActionMenu.getCurrentCombatState() == "deplacement" && nextavailablemovement >= 0 && this.canMove)
+                        {
+                            this.moveMarkerY -= 1;
+                            this.availableMovement = tempMaxMove - Convert.ToInt32(Math.Sqrt(Math.Pow(this.moveMarkerX - this.playerXPos, 2) + Math.Pow(this.moveMarkerY - this.PlayerYPos, 2)));
+                            DrawMap.UpdateMapMoveMarkerPos(this);
+                            DrawMap.UpdateMapPlayerPos(this);
+                        }
+                        break;
+                    case ConsoleKey.S: // Mouvement vers le bas
+                        nextavailablemovement = tempMaxMove - Convert.ToInt32(Math.Sqrt(Math.Pow(this.moveMarkerX - this.playerXPos, 2) + Math.Pow(this.moveMarkerY + 1 - this.PlayerYPos, 2)));
+                        if (!DrawMap.getCollisionChars().Contains(surroundingChars["botChar"]) && this.moveMarkerY + 1 > 0 && this.moveMarkerY + 1 < DrawMap.getYsize() && PlayerActionMenu.getCurrentCombatState() == "deplacement" && nextavailablemovement >= 0 && this.canMove)
+                        {
+                            this.moveMarkerY += 1;
+                            this.availableMovement = tempMaxMove - Convert.ToInt32(Math.Sqrt(Math.Pow(this.moveMarkerX - this.playerXPos, 2) + Math.Pow(this.moveMarkerY - this.PlayerYPos, 2)));
+                            DrawMap.UpdateMapMoveMarkerPos(this);
+                            DrawMap.UpdateMapPlayerPos(this);
+                        }
+                        break;
+                    case ConsoleKey.Q: // Mouvement vers la gauche
+                        nextavailablemovement = tempMaxMove - Convert.ToInt32(Math.Sqrt(Math.Pow(this.moveMarkerX - 1 - this.playerXPos, 2) + Math.Pow(this.moveMarkerY - this.PlayerYPos, 2)));
+                        if (!DrawMap.getCollisionChars().Contains(surroundingChars["leftChar"]) && this.moveMarkerX - 1 > 0 && this.moveMarkerX - 1 < DrawMap.getXsize() && PlayerActionMenu.getCurrentCombatState() == "deplacement" && nextavailablemovement >= 0 && this.canMove)
+                        {
+                            this.moveMarkerX -= 1;
+                            this.availableMovement = tempMaxMove - Convert.ToInt32(Math.Sqrt(Math.Pow(this.moveMarkerX - this.playerXPos, 2) + Math.Pow(this.moveMarkerY - this.PlayerYPos, 2)));
+                            DrawMap.UpdateMapMoveMarkerPos(this);
+                            DrawMap.UpdateMapPlayerPos(this);
+                        }
+                        break;
+                    case ConsoleKey.D: // Mouvement vers la droite
+                        nextavailablemovement = tempMaxMove - Convert.ToInt32(Math.Sqrt(Math.Pow(this.moveMarkerX + 1 - this.playerXPos, 2) + Math.Pow(this.moveMarkerY - this.PlayerYPos, 2)));
+                        if (!DrawMap.getCollisionChars().Contains(surroundingChars["rightChar"]) && this.moveMarkerX + 1 > 0 && this.moveMarkerX + 1 < DrawMap.getXsize() && PlayerActionMenu.getCurrentCombatState() == "deplacement" && nextavailablemovement >= 0 && this.canMove)
+                        {
+                            this.moveMarkerX += 1;
+                            this.availableMovement = tempMaxMove - Convert.ToInt32(Math.Sqrt(Math.Pow(this.moveMarkerX - this.playerXPos, 2) + Math.Pow(this.moveMarkerY - this.PlayerYPos, 2)));
+                            DrawMap.UpdateMapMoveMarkerPos(this);
+                            DrawMap.UpdateMapPlayerPos(this);
+                        }
+                        break;
+
+                    case ConsoleKey.E:
+                        if (PlayerActionMenu.getCurrentCombatState() == "deplacement")
+                        {
+                            if(this.availableMovement <= 0){
+                                this.canMove = false;
+                                tempMaxMove = this.availableMovement;
+                            }else{
+                                tempMaxMove = this.availableMovement;
+                            }
+                            this.playerXPos = this.moveMarkerX;
+                            this.playerYPos = this.moveMarkerY;
+                            DrawMap.UpdateMapPlayerPos(this);
+                            PlayerActionMenu.removeLastCombatState();
+                        }
+                        break;
+
+
+                    case ConsoleKey.D0:
+                        PlayerActionMenu.CombatActionMenu(0, this);
+                        break;
+                    case ConsoleKey.D1:
+                        PlayerActionMenu.CombatActionMenu(1, this);
+                        break;
+                    case ConsoleKey.D2:
+                        PlayerActionMenu.CombatActionMenu(2, this);
+                        break;
+                    case ConsoleKey.D3:
+                        PlayerActionMenu.CombatActionMenu(3, this);
+                        break;
+                    case ConsoleKey.D4:
+                        PlayerActionMenu.CombatActionMenu(4, this);
+                        break;
+                    case ConsoleKey.D5:
+                        PlayerActionMenu.CombatActionMenu(5, this);
+                        break;
+                    case ConsoleKey.D6:
+                        PlayerActionMenu.CombatActionMenu(6, this);
+                        break;
+                    case ConsoleKey.D7:
+                        PlayerActionMenu.CombatActionMenu(7, this);
+                        break;
+                    case ConsoleKey.D8:
+                        PlayerActionMenu.CombatActionMenu(8, this);
+                        break;
+                    case ConsoleKey.D9:
+                        PlayerActionMenu.CombatActionMenu(9, this);
+                        break;
+                }
+            } while (isPlayersTurn);
         }
 
         // Renvoie la liste des ennemies dans la même salle que le joueur
-        public List<Enemy> EnemyinRoom(){
-            List<Enemy> enemyInRoom = [];
+        public List<Enemy> EnemyinRoom()
+        {
+            List<Enemy> enemyInRoom = new List<Enemy>();
             int[] playercurrentchunk = this.getPlayerCurrentChunk();
-            foreach(Enemy enemy in Program.enemies!){
-                int[] enemyCurrentChunk = {enemy.getXpos()/26, enemy.getYpos()/9};
-                if(enemyCurrentChunk[0] == playercurrentchunk[0] && enemyCurrentChunk[1] == playercurrentchunk[1]){
+            foreach (Enemy enemy in Program.enemies!)
+            {
+                int[] enemyCurrentChunk = { enemy.getXpos() / 26, enemy.getYpos() / 9 };
+                if (enemyCurrentChunk[0] == playercurrentchunk[0] && enemyCurrentChunk[1] == playercurrentchunk[1])
+                {
                     enemyInRoom.Add(enemy);
                 }
             }
@@ -521,8 +711,9 @@ namespace ConsoleRPG2
         }
 
         // Renvoie sous forme de dictionnaire, les caractères autour du joueur
-        public Dictionary<string,char> CheckPlayerSurroundings(){
-            Dictionary<string,char> surroundingChars = new()
+        public Dictionary<string, char> CheckPlayerSurroundings()
+        {
+            Dictionary<string, char> surroundingChars = new()
             {
                 { "upChar", DrawMap.GetMap()[this.playerXPos][this.playerYPos - 1] },
                 { "rightChar", DrawMap.GetMap()[this.playerXPos + 1][this.playerYPos] },

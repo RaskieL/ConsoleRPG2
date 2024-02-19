@@ -226,6 +226,7 @@ namespace ConsoleRPG2
     public class PlayerActionMenu : UI
     {
         private static List<string> MenuStates = new List<string>() { "action_menu" };
+        private static List<string> CombatMenuStates = new List<string>() { "action_menu" };
 
         public static void ActionMenu(int input)
         {
@@ -283,10 +284,81 @@ namespace ConsoleRPG2
             }
         }
 
+        public static void CombatActionMenu(int input, Player player)
+        {
+            if (input == 0 && getCurrentCombatState() != "action_menu")
+            {
+                removeLastCombatState();
+            }
+            else if(input == 0 && getCurrentCombatState() == "action_menu")
+            {
+                Console.Clear();
+                Console.WriteLine("Êtes vous sûr de vouloir revenir au menu principal ? (O/N)");
+                string ans = Console.ReadLine()!.ToLower();
+                if(ans == "o" || ans == "oui"){
+                    StateMachine.removeLastState();
+                    StateMachine.removeLastState();
+                    player.setPlayersTurn(false);
+                }
+            }
+
+            switch (getCurrentCombatState())
+            {
+                case "action_menu":
+                    {
+
+                        switch (input)
+                        {
+                            case 1:
+                                addCombatState("deplacement");
+                                break;
+                            case 2:
+                                addCombatState("attaque");
+                                break;
+                            case 3:
+                                addCombatState("competences");
+                                break;
+                            case 4:
+                                addCombatState("sorts");
+                                break;
+                            case 5:
+                                addCombatState("inventaire");
+                                break;
+                            case 6:
+                                addCombatState("feuille");
+                                break;
+                            case 7:
+                                player.setPlayersTurn(false);
+                                break;
+                            case 8:
+                                Console.WriteLine("8 Pressed !");
+                                break;
+                            case 9:
+                                Console.WriteLine("9 Pressed !");
+                                break;
+                        }
+                        break;
+                    }
+            }
+        }
+
         public static void DisplayActionMenu(){
             switch(getCurrentState()){
                 case "action_menu":
-                    Console.WriteLine("[0] - Exit to Main Menu");
+                    Console.WriteLine("[1] - Feuille de personnage | [2] - Inventaire | [0] - Exit to Main Menu");
+                    break;
+            }
+        }
+
+        public static void DisplayCombatActionMenu(Player player){
+            switch(getCurrentCombatState()){
+                case "action_menu":
+                    Console.WriteLine("Menu d'action");
+                    Console.WriteLine("[1] - Se déplacer | [2] - Attaquer | [3] - Compétences | [4] - Sorts | [5] - Inventaire | [6] - Feuille de personnage | [7] - Tour suivant | [0] - Exit to Main Menu");
+                    break;
+                case "deplacement":
+                    Console.WriteLine("Déplacement");
+                    Console.WriteLine($"[E] - Confirmer | [0] - Annuler | {player.getAvailableMovement()}/{player.getMoveDistance()}m");
                     break;
             }
         }
@@ -325,6 +397,42 @@ namespace ConsoleRPG2
         {
             removeLastState();
             addState(state);
+        }
+
+        public static void removeLastCombatState()
+        {
+            CombatMenuStates.RemoveAt(0);
+        }
+
+        // Ajoute à l'index 0 un nouvel état
+        public static void addCombatState(string state)
+        {
+            CombatMenuStates.Insert(0, state);
+        }
+
+        // Renvoie l'état courant
+        public static string getCurrentCombatState()
+        {
+            return CombatMenuStates.First();
+        }
+
+        // Renvoie l'état à l'index voulu
+        public static string getCombatState(int index)
+        {
+            return CombatMenuStates.ElementAt(index);
+        }
+
+        // Permet d'assigner l'état à un index à un autre état.
+        public static void setCombatState(int index, string state)
+        {
+            CombatMenuStates[0] = state;
+        }
+
+        // Remplace l'état courant par un autre.
+        public static void updateCurrentCombatState(string state)
+        {
+            removeLastCombatState();
+            addCombatState(state);
         }
     }
 }

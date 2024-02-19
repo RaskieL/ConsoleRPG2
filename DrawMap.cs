@@ -20,6 +20,7 @@ namespace ConsoleRPG2
 
         private const char playerToken = 'O';
         private static int[] previousPlayerPosition = new int[] { 0, 0 };
+        private static int[] previousmoveMarkerPosition = new int[] { 0, 0 };
 
         private static Random rnd = new Random();
 
@@ -218,6 +219,16 @@ namespace ConsoleRPG2
             map[player.PlayerXPos][player.PlayerYPos] = playerToken;
         }
 
+        public static void UpdateMapMoveMarkerPos(Player player)
+        {
+            if (!collisionChars.Contains(map[previousmoveMarkerPosition[0]][previousmoveMarkerPosition[1]]))
+            {
+                map[previousmoveMarkerPosition[0]][previousmoveMarkerPosition[1]] = ' ';
+            }
+
+            map[player.getMoveMarkerPosX()][player.getMoveMarkerPosY()] = 'x';
+        }
+
         public static int getXsize()
         {
             return XSIZE;
@@ -255,6 +266,12 @@ namespace ConsoleRPG2
         {
             previousPlayerPosition[0] = x;
             previousPlayerPosition[1] = y;
+        }
+
+        public static void setPreviousMoveMarkerPos(int x, int y)
+        {
+            previousmoveMarkerPosition[0] = x;
+            previousmoveMarkerPosition[1] = y;
         }
 
         public static void InitializeEnemiesPosition(Enemy[] enemies)
